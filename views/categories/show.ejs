@@ -1,0 +1,89 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+
+<div class="breadcrumb">
+  <a href="/categories">← Back to Categories</a>
+</div>
+
+<% if (typeof error !== "undefined" && error) { %>
+  <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<section class="detail-header">
+  <div>
+    <h1><%= category.name %></h1>
+    <p class="muted"><%= category.description || "No description for this category." %></p>
+  </div>
+  <div class="action-group">
+    <a href="/categories/<%= category.id %>/edit" class="btn btn-secondary">Edit Category</a>
+    <a href="/items/new?category_id=<%= category.id %>" class="btn btn-primary">+ Add Item</a>
+    <form
+      action="/categories/<%= category.id %>/delete"
+      method="POST"
+      class="inline-form"
+      onsubmit="return confirm('Delete this item permanently?');"
+    >
+      <input
+        type="password"
+        name="adminPassword"
+        required
+        placeholder="Admin password"
+        aria-label="Admin password to delete"
+        class="inline-password"
+      />
+      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </form>
+  </div>
+</section>
+
+<section>
+  <h2>Items in <%= category.name %> (<%= items.length %>)</h2>
+
+  <% if (items.length === 0) { %>
+    <div class="empty-state">
+      <p>No items in this category yet.</p>
+      <a href="/items/new" class="btn btn-primary">Add an Item</a>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Price</th>
+            <th>In Stock</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach((item) => { %>
+            <tr>
+              <td class="mono"><%= item.sku %></td>
+              <td><a href="/items/<%= item.id %>"><strong><%= item.name %></strong></a></td>
+              <td><%= item.brand_name || "Unbranded" %></td>
+              <td>$<%= Number(item.price).toFixed(2) %></td>
+              <td>
+                <% if (item.quantity === 0) { %>
+                  <span class="badge badge-danger">Out of stock</span>
+                <% } else if (item.quantity <= 5) { %>
+                  <span class="badge badge-warn"><%= item.quantity %> left</span>
+                <% } else { %>
+                  <span class="badge badge-ok"><%= item.quantity %></span>
+                <% } %>
+              </td>
+              <td class="text-right">
+                <a href="/items/<%= item.id %>" class="btn btn-ghost">Details</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+</main>
+</body>
+</html>

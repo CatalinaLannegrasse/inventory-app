@@ -1,0 +1,72 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+
+<div class="breadcrumb">
+  <a href="/categories/<%= item.category_id %>">← Back to <%= item.category_name %></a>
+  <span>·</span>
+  <a href="/items">All Items</a>
+</div>
+
+<% if (typeof error !== "undefined" && error) { %>
+  <div class="alert alert-error"><%= error %></div>
+<% } %>
+
+<article class="detail-card">
+  <div class="detail-header">
+    <div>
+      <div class="mono muted">SKU: <%= item.sku %></div>
+      <h1><%= item.name %></h1>
+    </div>
+    <div class="action-group">
+      <a href="/items/<%= item.id %>/edit" class="btn btn-secondary">Edit Item</a>
+      <form
+        action="/items/<%= item.id %>/delete"
+        method="POST"
+        class="inline-form"
+        onsubmit="return confirm('Delete this item permanently?');">
+        <input
+          type="password"
+          name="adminPassword"
+          required
+          placeholder="Admin password"
+          aria-label="Admin password to delete"
+          class="inline-password"
+        />
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+  </div>
+
+  <p class="item-description"><%= item.description || "No technical description provided." %></p>
+
+  <dl class="specs-grid">
+    <div>
+      <dt>Unit Price</dt>
+      <dd><strong>$<%= Number(item.price).toFixed(2) %></strong></dd>
+    </div>
+    <div>
+      <dt>Quantity in Stock</dt>
+      <dd><%= item.quantity %></dd>
+    </div>
+    <div>
+      <dt>Total Stock Value</dt>
+      <dd>$<%= (Number(item.price) * item.quantity).toFixed(2) %></dd>
+    </div>
+    <div>
+      <dt>Category</dt>
+      <dd><a href="/categories/<%= item.category_id %>"><%= item.category_name %></a></dd>
+    </div>
+    <div>
+      <dt>Brand</dt>
+      <dd><%= item.brand_name || "Unbranded / Generic" %></dd>
+    </div>
+    <div>
+      <dt>Last Updated</dt>
+      <dd><%= new Date(item.updated_at).toLocaleDateString() %></dd>
+    </div>
+  </dl>
+</article>
+
+</main>
+</body>
+</html>

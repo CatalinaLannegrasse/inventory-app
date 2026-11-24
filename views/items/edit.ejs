@@ -1,0 +1,133 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+
+<div class="breadcrumb">
+  <a href="/items/<%= item.id %>">← Back to Item Details</a>
+</div>
+
+<div class="detail-card form-card">
+  <h1>Edit Tech Item</h1>
+
+  <% if (errors && errors.length > 0) { %>
+    <div class="alert alert-error">
+      <ul class="error-list">
+        <% errors.forEach((err) => { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/items/<%= item.id %>/update" method="POST" class="stack-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="sku">SKU *</label>
+        <input
+          type="text"
+          id="sku"
+          name="sku"
+          required
+          maxlength="40"
+          value="<%= item.sku %>"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="name">Product Name *</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          maxlength="150"
+          value="<%= item.name %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="category_id">Category *</label>
+        <select id="category_id" name="category_id" required>
+          <% categories.forEach((cat) => { %>
+            <option
+              value="<%= cat.id %>"
+              <%= Number(item.category_id) === Number(cat.id) ? "selected" : "" %>
+            >
+              <%= cat.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="brand_id">Brand</label>
+        <select id="brand_id" name="brand_id">
+          <option value="">None / Unbranded</option>
+          <% brands.forEach((brand) => { %>
+            <option
+              value="<%= brand.id %>"
+              <%= Number(item.brand_id) === Number(brand.id) ? "selected" : "" %>
+            >
+              <%= brand.name %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="price">Price (USD) *</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          required
+          min="0"
+          step="0.01"
+          value="<%= Number(item.price).toFixed(2) %>"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Stock Quantity *</label>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          required
+          min="0"
+          step="1"
+          value="<%= item.quantity %>"
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description & Specs</label>
+      <textarea id="description" name="description" rows="3"><%= item.description || '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="adminPassword">Admin Password *</label>
+      <input
+        type="password"
+        id="adminPassword"
+        name="adminPassword"
+        required
+        autocomplete="current-password"
+        placeholder="Enter admin password to save changes"
+      />
+    </div>
+
+    <div class="action-group">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="/items/<%= item.id %>" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+
+</main>
+</body>
+</html>

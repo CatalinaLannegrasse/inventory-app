@@ -1,0 +1,41 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+
+<div class="page-header">
+  <div>
+    <h1>Brands</h1>
+    <p class="muted">Manufacturers and vendors stocked in your store.</p>
+  </div>
+  <a href="/brands/new" class="btn btn-primary">Add Brand</a>
+</div>
+
+<% if (brands.length === 0) { %>
+  <div class="empty-state">
+    <p>No brands added yet.</p>
+  </div>
+<% } else { %>
+  <div class="grid">
+    <% brands.forEach((brand) => { %>
+      <article class="card">
+        <div class="card-top">
+          <h2><%= brand.name %></h2>
+          <span class="badge"><%= brand.item_count %> <%= brand.item_count === 1 ? "item" : "items" %></span>
+        </div>
+        <% if (brand.website) { %>
+          <p class="card-desc"><a href="<%= brand.website %>" target="_blank" rel="noopener noreferrer"><%= brand.website %></a></p>
+        <% } else { %>
+          <p class="card-desc muted">No website listed.</p>
+        <% } %>
+        <div class="card-actions">
+          <form action="/brands/<%= brand.id %>/delete" method="POST" class="inline-form">
+            <button type="submit" class="btn btn-ghost">Remove Brand</button>
+          </form>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+<% } %>
+
+</main>
+</body>
+</html>

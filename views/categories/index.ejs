@@ -1,0 +1,37 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+
+<div class="page-header">
+  <div>
+    <h1>Categories</h1>
+    <p class="muted">Browse tech departments and see how many products are stocked in each.</p>
+  </div>
+  <a href="/categories/new" class="btn btn-primary">Add Category</a>
+</div>
+
+<% if (categories.length === 0) { %>
+  <div class="empty-state">
+    <p>No categories found yet.</p>
+    <a href="/categories/new" class="btn btn-primary">Create your first category</a>
+  </div>
+<% } else { %>
+  <div class="grid">
+    <% categories.forEach((category) => { %>
+      <article class="card">
+        <div class="card-top">
+          <h2><a href="/categories/<%= category.id %>"><%= category.name %></a></h2>
+          <span class="badge"><%= category.item_count %> <%= category.item_count === 1 ? "item" : "items" %></span>
+        </div>
+        <p class="card-desc"><%= category.description || "No description provided." %></p>
+        <div class="card-actions">
+          <a href="/categories/<%= category.id %>" class="btn btn-secondary">View Items</a>
+          <a href="/categories/<%= category.id %>/edit" class="btn btn-ghost">Edit</a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+<% } %>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+
+<div class="page-header">
+  <div>
+    <h1>All Tech Items</h1>
+    <p class="muted">Full store inventory across all categories and brands.</p>
+  </div>
+  <a href="/items/new" class="btn btn-primary">Add Tech Item</a>
+</div>
+
+<% if (items.length === 0) { %>
+  <div class="empty-state">
+    <p>No items in inventory yet.</p>
+    <a href="/items/new" class="btn btn-primary">Add your first item</a>
+  </div>
+<% } else { %>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Brand</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% items.forEach((item) => { %>
+          <tr>
+            <td class="mono"><%= item.sku %></td>
+            <td>
+              <a href="/items/<%= item.id %>"><strong><%= item.name %></strong></a>
+              <% if (item.description) { %>
+                <div class="table-sub"><%= item.description %></div>
+              <% } %>
+            </td>
+            <td><a href="/categories/<%= item.category_id %>"><%= item.category_name %></a></td>
+            <td><%= item.brand_name || "—" %></td>
+            <td>$<%= Number(item.price).toFixed(2) %></td>
+            <td>
+              <% if (item.quantity === 0) { %>
+                <span class="badge badge-danger">0 (Out)</span>
+              <% } else if (item.quantity <= 5) { %>
+                <span class="badge badge-warn"><%= item.quantity %> low</span>
+              <% } else { %>
+                <span class="badge badge-ok"><%= item.quantity %></span>
+              <% } %>
+            </td>
+            <td class="text-right">
+              <a href="/items/<%= item.id %>" class="btn btn-ghost">View</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+</main>
+</body>
+</html>
